@@ -1,7 +1,11 @@
 import React from "react";
 
-const Total = ({ exercises1, exercises2, exercises3 }) => {
-  return <p>{exercises1 + exercises2 + exercises3}</p>;
+const Total = ({ parts }) => {
+  return (
+    <p>
+      Number of exercises {parts.reduce((pre, part) => pre + part.exercises, 0)}
+    </p>
+  );
 };
 
 export default Total;
