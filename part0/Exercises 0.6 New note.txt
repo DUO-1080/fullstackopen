@@ -1,0 +1,12 @@
+browser->server: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa
+server-->browser: HTML-code
+
+note over browser:
+browser executes the event handler 
+that render notes to display,
+post data to server
+end note
+
+note over server:
+server parse data from request, add note to notes.
+end note
