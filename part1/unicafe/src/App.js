@@ -8,7 +8,25 @@ const Button = ({ onClick, text }) => {
   );
 };
 
-const Statistics = ({ text, value }) => {
+const Statistics = ({ good, bad, neutral }) => {
+  return (
+    <table>
+      <tbody>
+        <Statistic text="good" value={good} />
+        <Statistic text="neutral" value={neutral} />
+        <Statistic text="bad" vlaue={bad} />
+        <Statistic text="all" value={good + bad + neutral} />
+        <Statistic text="average" value={(bad + good + neutral) / 3} />
+        <Statistic
+          text="positive"
+          value={((good / (bad + good + neutral)) * 100).toFixed(2) + " %"}
+        />
+      </tbody>
+    </table>
+  );
+};
+
+const Statistic = ({ text, value }) => {
   return (
     <tr>
       <td> {text} </td>
@@ -46,19 +64,7 @@ const App = () => {
       <Button onClick={handleClick} text="bad" />
       <h1>statistics</h1>
       {good || neutral || bad ? (
-        <table>
-          <tbody>
-            <Statistics text="good" value={good} />
-            <Statistics text="neutral" value={neutral} />
-            <Statistics text="bad" value={bad} />
-            <Statistics text="all" value={bad + good + neutral} />
-            <Statistics text="average" value={(bad + good + neutral) / 3} />
-            <Statistics
-              text="positive"
-              value={((good / (bad + good + neutral)) * 100).toFixed(2) + " %"}
-            />
-          </tbody>
-        </table>
+        <Statistics good={good} bad={bad} neutral={neutral} />
       ) : (
         "No feedback given"
       )}
