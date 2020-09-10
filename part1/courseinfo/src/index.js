@@ -1,8 +1,33 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import Header from "./components/Header";
-import Content from "./components/Content";
-import Total from "./components/Total";
+
+const Content = ({ parts }) => (
+  <>
+    <Part part={parts[0]} />
+    <Part part={parts[1]} />
+    <Part part={parts[2]} />
+  </>
+);
+
+const Part = ({ part: { name, exercises } }) => {
+  return (
+    <p>
+      {name} {exercises}
+    </p>
+  );
+};
+
+const Header = ({ course }) => {
+  return <h1>{course}</h1>;
+};
+
+const Total = ({ parts }) => {
+  return (
+    <p>
+      Number of exercises {parts.reduce((pre, part) => pre + part.exercises, 0)}
+    </p>
+  );
+};
 
 const App = () => {
   const course = {
