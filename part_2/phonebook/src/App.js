@@ -3,10 +3,12 @@ import phoneService from "./services/phoneService";
 import Filter from "./components/Filter";
 import PersonForm from "./components/PersonForm";
 import Persons from "./components/Persons";
+import Message from "./components/Message";
 
 function App() {
   const [persons, setPersons] = useState([]);
   const [filterName, setFilterName] = useState("");
+  const [message, setMessage] = useState(null);
 
   useEffect(() => {
     phoneService.getAll().then((persons) => setPersons(persons));
@@ -31,9 +33,13 @@ function App() {
             setPersons(persons.map((p) => (p.id === person.id ? person : p)))
           );
     } else {
-      phoneService
-        .addPerson(person)
-        .then((person) => setPersons(persons.concat(person)));
+      phoneService.addPerson(person).then((person) => {
+        setPersons(persons.concat(person));
+        setMessage({ success: true, info: `Add ${person.name}` });
+        setTimeout(() => {
+          setMessage(null);
+        }, 2000);
+      });
     }
   };
 
@@ -44,6 +50,14 @@ function App() {
         .remove(id)
         .then(() => setPersons(persons.filter((person) => person.id !== id)))
         .catch((err) => {
+          setPersons(persons.filter((person) => person.id !== id));
+          setMessage({
+            success: false,
+            info: `Information of ${person.name} has already been removed from server.`,
+          });
+          setTimeout(() => {
+            setMessage(null);
+          }, 1000);
           console.log("cannot able to delete " + person.name, err);
         });
   };
@@ -55,6 +69,7 @@ function App() {
   return (
     <div>
       <h2>PhoneBook</h2>
+      {message && <Message message={message} />}
       <Filter onFilter={handleFilter} />
       <h3>Add a new</h3>
       <PersonForm onAddPerson={handleAddPerson} />
