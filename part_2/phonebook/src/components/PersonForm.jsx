@@ -28,7 +28,7 @@ const PersonForm = ({ onAddPerson }) => {
       <div>
         <label htmlFor="number">number</label>
         <input
-          type="text"
+          type="number"
           id="number"
           value={number}
           onChange={(e) => setNumber(e.target.value)}
