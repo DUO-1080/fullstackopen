@@ -19,28 +19,26 @@ function App() {
   };
 
   const handleAddPerson = (person) => {
-    const existPerson = persons.find(
-      (p) => p.name.toLowerCase() === person.name.toLowerCase()
-    );
-    console.log("exist person:", existPerson);
-    if (existPerson) {
-      window.confirm(
-        `${person.name} is already added to phonebook, replace the old number with the new one?`
-      ) &&
-        phoneService
-          .update(existPerson.id, person)
-          .then((person) =>
-            setPersons(persons.map((p) => (p.id === person.id ? person : p)))
-          );
-    } else {
-      phoneService.addPerson(person).then((person) => {
-        setPersons(persons.concat(person));
-        setMessage({ success: true, info: `Add ${person.name}` });
-        setTimeout(() => {
-          setMessage(null);
-        }, 2000);
-      });
-    }
+    phoneService.personInServer(person).then((personInServer) => {
+      console.log("personInServer: ", personInServer);
+      if (personInServer) {
+        window.confirm(
+          `${person.name} is already added to phonebook, replace the old number with the new one?`
+        ) &&
+          phoneService.update(personInServer.id, person).then((person) => {
+            console.log("update new person: ", person);
+            setPersons(persons.map((p) => (p.id === person.id ? person : p)));
+          });
+      } else {
+        phoneService.addPerson(person).then((person) => {
+          setPersons(persons.concat(person));
+          setMessage({ success: true, info: `Add ${person.name}` });
+          setTimeout(() => {
+            setMessage(null);
+          }, 2000);
+        });
+      }
+    });
   };
 
   const handleDeletePerson = (id) => {

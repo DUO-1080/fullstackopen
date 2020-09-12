@@ -20,4 +20,9 @@ const update = (id, person) => {
   return axios.put(url, person).then((response) => response.data);
 };
 
-export default { getAll, addPerson, remove, update };
+const personInServer = (newPerson) =>
+  getAll().then((persons) =>
+    persons.find((person) => person.name === newPerson.name)
+  );
+
+export default { getAll, addPerson, remove, update, personInServer };
