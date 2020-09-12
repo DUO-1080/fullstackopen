@@ -20,23 +20,40 @@ function App() {
 
   const handleAddPerson = (person) => {
     phoneService.personInServer(person).then((personInServer) => {
-      console.log("personInServer: ", personInServer);
       if (personInServer) {
         window.confirm(
           `${person.name} is already added to phonebook, replace the old number with the new one?`
         ) &&
-          phoneService.update(personInServer.id, person).then((person) => {
-            console.log("update new person: ", person);
-            setPersons(persons.map((p) => (p.id === person.id ? person : p)));
-          });
+          phoneService
+            .update(personInServer.id, person)
+            .then((person) => {
+              console.log("update new person: ", person);
+              setPersons(persons.map((p) => (p.id === person.id ? person : p)));
+            })
+            .catch((error) => {
+              console.log("update person error: ", error.response.data);
+              setMessage({ success: false, info: error.response.data.error });
+              setTimeout(() => {
+                setMessage(null);
+              }, 2000);
+            });
       } else {
-        phoneService.addPerson(person).then((person) => {
-          setPersons(persons.concat(person));
-          setMessage({ success: true, info: `Add ${person.name}` });
-          setTimeout(() => {
-            setMessage(null);
-          }, 2000);
-        });
+        phoneService
+          .addPerson(person)
+          .then((person) => {
+            setPersons(persons.concat(person));
+            setMessage({ success: true, info: `Add ${person.name}` });
+            setTimeout(() => {
+              setMessage(null);
+            }, 2000);
+          })
+          .catch((error) => {
+            console.log("add new person error: ", error.response.data);
+            setMessage({ success: false, info: error.response.data.error });
+            setTimeout(() => {
+              setMessage(null);
+            }, 2000);
+          });
       }
     });
   };
